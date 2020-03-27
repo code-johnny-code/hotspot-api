@@ -1,0 +1,11 @@
+{
+  "name": "HotSpot-api",
+  "version": "1.0.0",
+  "dependencies": {
+    "body-parser": "latest",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "h3-js": "^3.6.3",
+    "mongodb": "^3.5.5"
+  }
+}
