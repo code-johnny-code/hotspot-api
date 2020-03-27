@@ -1,6 +1,7 @@
 # HotSpot API
 An Express/NodeJS API powering the HotSpot Mobile App.
-##Endpoints
+
+## Endpoints
 
 ### Register new User ID
 Accepts a new User ID and Device ID, adding it to the `users` Collection  
