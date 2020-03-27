@@ -1,3 +1,5 @@
+![HotSpot](https://repository-images.githubusercontent.com/250440145/0c952c80-7032-11ea-9f19-8a45a66b9cdf)
+
 # HotSpot API
 An Express/NodeJS API powering the HotSpot Mobile App.
 
