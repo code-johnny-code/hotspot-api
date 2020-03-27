@@ -9,6 +9,25 @@ const client = new MongoClient(process.env.DB_URL, { useNewUrlParser: true, auth
 const dbName = process.env.DB_NAME;
 
 module.exports = {
+  registerNewUser(data, response) {
+    if (data.key === process.env.API_KEY) {
+      delete data.key;
+      client.connect(() => {
+        const db = client.db(dbName);
+        const collection = db.collection('users');
+        return collection.insertOne({userId: data.userId, deviceId: data.deviceId, positive: false, positiveDTG: null},
+          function (error, res) {
+          if(error) {
+            response({'error': res});
+          } else {
+            response(res);
+          }
+        })
+      })
+    } else {
+      response({'error': 'Unauthorized'})
+    }
+  },
   logPosition(data, response) {
     if (data.key === process.env.API_KEY) {
       delete data.key;
