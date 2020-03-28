@@ -1,5 +1,5 @@
 require('dotenv').config();
-const {geoToH3} = require('h3-js');
+const {geoToH3, h3ToGeoBoundary} = require('h3-js');
 const moment = require('moment');
 
 const MongoClient = require('mongodb').MongoClient;
@@ -104,16 +104,27 @@ module.exports = {
       return client.connect(function () {
         const db = client.db(dbName);
         const collection = db.collection('users');
+        // Find all user records that have tested positive
         collection.find({positive: true}).toArray((err, positiveUsers) => {
           const positiveIds = positiveUsers.map(user => user.userId);
           const collection = db.collection('position_logs');
           // Find Position Reports from users with Positive Test results, where the speed was lower than 2 mps (walking speed)
           collection.find({userId : {$in: positiveIds}, speed: {$lt: 2} }).toArray((err, positiveLocations) => {
-            // TODO: Filter out locations not within the 2-week window from the user's positive test
-            const h3Lists = positiveLocations.map(locationReport => locationReport.h3);
+            // Filter out position records older than 2 weeks from the timestamp of the positive test result report
+            const filteredPositiveLocations = positiveLocations.filter(report => {
+              const positiveTestTimestamp = moment(positiveUsers.find(user => user.userId === report.userId).positiveDTG);
+              const eventTimestamp = moment(report.timestamp);
+              const twoWeekWindowStart = moment(positiveTestTimestamp).subtract(2, 'weeks');
+              report.timestamp = twoWeekWindowStart;
+              return eventTimestamp.isAfter(twoWeekWindowStart)
+            });
+            const h3Lists = filteredPositiveLocations.map(locationReport => locationReport.h3);
             const h3ListsFlat = [].concat.apply([], h3Lists);
             const hotspotH3s = [...new Set(h3ListsFlat)];
-            return response(hotspotH3s);
+            const hotspotIdsWithGeo = hotspotH3s.map(h3_index => {
+              return {h3: h3_index, geometry: h3ToGeoBoundary(h3_index, true)}
+            });
+            return response(hotspotIdsWithGeo);
           });
         });
       });
