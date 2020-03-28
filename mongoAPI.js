@@ -115,17 +115,14 @@ module.exports = {
               const positiveTestTimestamp = moment(positiveUsers.find(user => user.userId === report.userId).positiveDTG);
               const eventTimestamp = moment(report.timestamp);
               const twoWeekWindowStart = moment(positiveTestTimestamp).subtract(2, 'weeks');
-              report.timestamp = twoWeekWindowStart;
+              report.timestamp = twoWeekWindowStart.valueOf();
               return eventTimestamp.isAfter(twoWeekWindowStart)
             });
-            const h3Lists = filteredPositiveLocations.map(locationReport => locationReport.h3);
-            const h3ListsFlat = [].concat.apply([], h3Lists);
-            const hotspotH3s = [...new Set(h3ListsFlat)];
-            // TODO: Add hotspot activation timestamp (first and latest?)
-            const hotspotIdsWithGeo = hotspotH3s.map(h3_index => {
-              return {h3: h3_index, geometry: h3ToGeoBoundary(h3_index, true)}
+            // TODO: Filter duplicate H3 cells, capture earliest and latest positve report within H3 cell
+            const h3Lists = filteredPositiveLocations.map(locationReport => {
+              return {h3: locationReport.h3, timestamp: locationReport.timestamp, geometry: h3ToGeoBoundary(locationReport.h3)}
             });
-            return response(hotspotIdsWithGeo);
+            return response(h3Lists);
           });
         });
       });
