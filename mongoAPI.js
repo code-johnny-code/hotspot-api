@@ -121,6 +121,7 @@ module.exports = {
             const h3Lists = filteredPositiveLocations.map(locationReport => locationReport.h3);
             const h3ListsFlat = [].concat.apply([], h3Lists);
             const hotspotH3s = [...new Set(h3ListsFlat)];
+            // TODO: Add hotspot activation timestamp (first and latest?)
             const hotspotIdsWithGeo = hotspotH3s.map(h3_index => {
               return {h3: h3_index, geometry: h3ToGeoBoundary(h3_index, true)}
             });
