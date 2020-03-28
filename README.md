@@ -82,7 +82,7 @@ Saves a user's position report to the database
 
 POST Body Example
 ```
-{"accuracy": 8.576000213623047, "altitude": 174.68255615234375, "heading": 0, "key": "8d64bae3-1820-40fa-821b-4d187e8483ad", "latitude": 39.12345678, "longitude": -90.12345678, "speed": 0, "userId": "2949dbdb-97e2-4786-b7fa-bd7e1c53cb66"}
+{"accuracy": 8.576000213623047, "altitude": 174.68255615234375, "heading": 0, "key": "8d64bae3-1820-40fa-821b-4d187e8483ad", "latitude": 39.12345678, "longitude": -90.12345678, "speed": 0, "userId": "2949dbdb-97e2-4786-b7fa-bd7e1c53cb66", "timestamp": "1360002924000"}
 ```
 
 Success Response Example
@@ -119,16 +119,9 @@ Success Response Example
              "latitude": 39.12345678,
              "longitude": -90.12345678,
              "speed": 0,
+             "timestamp": "1360002924000",
              "userId": "2949dbdb-97e2-4786-b7fa-bd7e1c53cb66",
-             "h3": [
-                 "8e264294597059f",
-                 "8e2642945970597",
-                 "8e264294597296f",
-                 "8e26429459704b7",
-                 "8e26429459704a7",
-                 "8e264294597058f",
-                 "8e2642945970587"
-             ],
+             "h3": "8e264294597059f",
              "_id": "5e7df00e7f411200179da217"
          }
      ],

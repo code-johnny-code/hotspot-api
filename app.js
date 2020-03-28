@@ -29,6 +29,14 @@ app.post('/reportNegative', (req, res) => {
   Mongo.reportNegativeTest(req.body, (results) => res.send(results));
 });
 
+app.post('/setGeofence', (req, res) => {
+  Mongo.setGeofence(req.body, (results) => res.send(results));
+});
+
+app.get('/hotspots', (req, res) => {
+  Mongo.getHotspots(req.body, (results) => res.send(results));
+});
+
 app.listen(process.env.PORT || 5000, function () {
   console.log('Express server listening on %d, in %s mode', process.env.PORT, app.get('env'));
 });
