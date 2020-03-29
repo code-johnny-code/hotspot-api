@@ -54,7 +54,7 @@ module.exports = {
         const userLocationCursor = collection.find({userId: data.userId});
         const locations = [];
         userLocationCursor.forEach(loc => {
-          loc.h3_geom = h3ToGeoBoundary(loc.h3);
+          loc.h3_geom = h3ToGeoBoundary(loc.h3, true);
           locations.push(loc)
         }, () => response(locations));
       });
@@ -124,7 +124,7 @@ module.exports = {
             });
             // TODO: Filter duplicate H3 cells, capture earliest and latest positve report within H3 cell
             const h3Lists = filteredPositiveLocations.map(locationReport => {
-              return {h3: locationReport.h3, timestamp: locationReport.timestamp, geometry: h3ToGeoBoundary(locationReport.h3)}
+              return {h3: locationReport.h3, timestamp: locationReport.timestamp, geometry: h3ToGeoBoundary(locationReport.h3, true)}
             });
             return response(h3Lists);
           });
