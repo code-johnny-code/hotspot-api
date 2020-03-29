@@ -103,35 +103,30 @@ module.exports = {
   // 2-weeks or where they were travelling faster than average walking speed (indicates a stop and not just driving),
   // return the H3 cells that they frequented while probably infectious.
   getHotspots(data, response) {
-    if (data.key === process.env.API_KEY) {
-      delete data.key;
-      return client.connect(function () {
-        const db = client.db(dbName);
-        const collection = db.collection('users');
-        // Find all user records that have tested positive
-        collection.find({positive: true}).toArray((err, positiveUsers) => {
-          const positiveIds = positiveUsers.map(user => user.userId);
-          const collection = db.collection('position_logs');
-          // Find Position Reports from users with Positive Test results, where the speed was lower than 2 mps (walking speed)
-          collection.find({userId : {$in: positiveIds}, speed: {$lt: 2} }).toArray((err, positiveLocations) => {
-            // Filter out position records older than 2 weeks from the timestamp of the positive test result report
-            const filteredPositiveLocations = positiveLocations.filter(report => {
-              const positiveTestTimestamp = moment(positiveUsers.find(user => user.userId === report.userId).positiveDTG);
-              const reportTimestamp = parseInt(report.timestamp);
-              const eventTimestamp = moment(reportTimestamp);
-              const twoWeekWindowStart = moment(positiveTestTimestamp).subtract(2, 'weeks');
-              return eventTimestamp.isAfter(twoWeekWindowStart)
-            });
-            // TODO: Filter duplicate H3 cells, capture earliest and latest positve report within H3 cell
-            const h3Lists = filteredPositiveLocations.map(locationReport => {
-              return {h3: locationReport.h3, timestamp: locationReport.timestamp, geometry: h3ToGeoBoundary(locationReport.h3, true)}
-            });
-            return response(h3Lists);
+    return client.connect(function () {
+      const db = client.db(dbName);
+      const collection = db.collection('users');
+      // Find all user records that have tested positive
+      collection.find({positive: true}).toArray((err, positiveUsers) => {
+        const positiveIds = positiveUsers.map(user => user.userId);
+        const collection = db.collection('position_logs');
+        // Find Position Reports from users with Positive Test results, where the speed was lower than 2 mps (walking speed)
+        collection.find({userId : {$in: positiveIds}, speed: {$lt: 2} }).toArray((err, positiveLocations) => {
+          // Filter out position records older than 2 weeks from the timestamp of the positive test result report
+          const filteredPositiveLocations = positiveLocations.filter(report => {
+            const positiveTestTimestamp = moment(positiveUsers.find(user => user.userId === report.userId).positiveDTG);
+            const reportTimestamp = parseInt(report.timestamp);
+            const eventTimestamp = moment(reportTimestamp);
+            const twoWeekWindowStart = moment(positiveTestTimestamp).subtract(2, 'weeks');
+            return eventTimestamp.isAfter(twoWeekWindowStart)
           });
+          // TODO: Filter duplicate H3 cells, capture earliest and latest positve report within H3 cell
+          const h3Lists = filteredPositiveLocations.map(locationReport => {
+            return {h3: locationReport.h3, timestamp: locationReport.timestamp, geometry: h3ToGeoBoundary(locationReport.h3, true)}
+          });
+          return response(h3Lists);
         });
       });
-    } else {
-      response({'error': 'Unauthorized'})
-    }
+    });
   }
 };
