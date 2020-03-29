@@ -53,7 +53,10 @@ module.exports = {
         const collection = db.collection('position_logs');
         const userLocationCursor = collection.find({userId: data.userId});
         const locations = [];
-        userLocationCursor.forEach(loc => locations.push(loc), () => response(locations));
+        userLocationCursor.forEach(loc => {
+          loc.h3_geom = h3ToGeoBoundary(loc.h3);
+          locations.push(loc)
+        }, () => response(locations));
       });
     } else {
       response({'error': 'Unauthorized'})
@@ -87,6 +90,7 @@ module.exports = {
       response({'error': 'Unauthorized'})
     }
   },
+  // TODO: Accept geometries to set geofences for alerting users of hotspots and special restrictions
   setGeofence(data, response) {
     if (data.key === process.env.API_KEY) {
       delete data.key;
