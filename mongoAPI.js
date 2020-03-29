@@ -32,7 +32,7 @@ module.exports = {
   logPosition(data, response) {
     if (data.key === process.env.API_KEY) {
       delete data.key;
-      const h3Resolution = 14;
+      const h3Resolution = 9;
       data.h3 = geoToH3(data.latitude, data.longitude, h3Resolution);
       return client.connect(function() {
         const db = client.db(dbName);
