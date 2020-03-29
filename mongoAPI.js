@@ -117,9 +117,9 @@ module.exports = {
             // Filter out position records older than 2 weeks from the timestamp of the positive test result report
             const filteredPositiveLocations = positiveLocations.filter(report => {
               const positiveTestTimestamp = moment(positiveUsers.find(user => user.userId === report.userId).positiveDTG);
-              const eventTimestamp = moment(report.timestamp);
+              const reportTimestamp = parseInt(report.timestamp);
+              const eventTimestamp = moment(reportTimestamp);
               const twoWeekWindowStart = moment(positiveTestTimestamp).subtract(2, 'weeks');
-              report.timestamp = twoWeekWindowStart.valueOf();
               return eventTimestamp.isAfter(twoWeekWindowStart)
             });
             // TODO: Filter duplicate H3 cells, capture earliest and latest positve report within H3 cell
