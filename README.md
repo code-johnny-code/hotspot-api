@@ -1,7 +1,20 @@
 ![HotSpot](https://repository-images.githubusercontent.com/250440145/0c952c80-7032-11ea-9f19-8a45a66b9cdf)
 
 # HotSpot API
-An Express/NodeJS API powering the HotSpot Mobile App.
+An Express/NodeJS API powering the [HotSpot Mobile App](https://github.com/code-johnny-code/hotspot).
+
+### .env file
+You'll need to set up a `.env` file in your project's root directory with the following keys and values:  
+
+```
+API_KEY=(whatever you want to use as your API key when communicating with the HotSpot App)
+DB_URL=(the URL of your MongoDB instance, such as mongodb://ds#####.mlab.com:#####/hotspot)
+DB_NAME=(MongoDB database name)
+DB_USER=(MongoDB user name)
+DB_PW=(MongoDB password)
+PORT=(whichever port you want the service to run on)
+
+```
 
 ## Endpoints
 
