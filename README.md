@@ -1,7 +1,9 @@
 ![HotSpot](https://repository-images.githubusercontent.com/250440145/0c952c80-7032-11ea-9f19-8a45a66b9cdf)
+Created for the Devpost COVID-19 Global Hackathon 1.0
 
 # HotSpot API
-An Express/NodeJS API powering the [HotSpot Mobile App](https://github.com/code-johnny-code/hotspot).
+
+An Express/NodeJS API powering the [HotSpot Mobile App](https://github.com/code-johnny-code/hotspot) and using a MongoDB instance (I used mLab.com).
 
 ### .env file
 You'll need to set up a `.env` file in your project's root directory with the following keys and values:  
